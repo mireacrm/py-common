@@ -5,7 +5,7 @@
 не попадали ни драйвер базы, ни клиент брокера.
 
 ```
-pip install "mireacrm-common[db,events,grpc] @ git+https://github.com/mireacrm/py-common@v0.1.0"
+pip install "mireacrm-common[db,events,grpc] @ git+https://github.com/mireacrm/py-common@v0.1.1"
 ```
 
 | Дополнение | Что тянет |
@@ -13,6 +13,16 @@ pip install "mireacrm-common[db,events,grpc] @ git+https://github.com/mireacrm/p
 | `db` | SQLAlchemy, asyncpg |
 | `events` | aio-pika, контракты |
 | `grpc` | grpcio, контракты |
+
+Контракты объявлены по имени, без адреса репозитория: прямой URL, указанный
+и здесь, и в сервисе, pip считает конфликтом — даже когда это один и тот же
+пакет одной и той же версии. Поэтому адрес контрактов называет потребитель,
+он же выбирает их версию. Ставить обвяз в одиночку нужно так:
+
+```
+pip install "mirea-contracts @ git+https://github.com/mireacrm/contracts-py@v0.1.1"
+pip install "mireacrm-common[db,events,grpc] @ git+https://github.com/mireacrm/py-common@v0.1.1"
+```
 
 Правка здесь стоит дорого: выпуск тега, затем повышение версии в каждом
 из шести сервисов.

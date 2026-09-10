@@ -13,10 +13,14 @@ dependencies = [
     "prometheus-client>=0.21",
 ]
 
+# Контракты просятся по имени, без адреса репозитория: прямой URL,
+# объявленный и здесь, и в сервисе, pip считает конфликтом, даже когда
+# это один и тот же пакет. Адрес объявляет потребитель — он же решает,
+# на какой версии контрактов работает.
 [project.optional-dependencies]
 db = ["sqlalchemy[asyncio]>=2.0.36", "asyncpg>=0.30"]
-events = ["aio-pika>=9.5", "protobuf>=5.28", "mirea-contracts @ git+https://github.com/mireacrm/contracts-py@v0.1.0"]
-grpc = ["grpcio>=1.68", "grpcio-reflection>=1.68", "protobuf>=5.28", "mirea-contracts @ git+https://github.com/mireacrm/contracts-py@v0.1.0"]
+events = ["aio-pika>=9.5", "protobuf>=5.28", "mirea-contracts"]
+grpc = ["grpcio>=1.68", "grpcio-reflection>=1.68", "protobuf>=5.28", "mirea-contracts"]
 dev = ["pytest>=8.3", "pytest-asyncio>=0.24"]
 
 [tool.pytest.ini_options]
