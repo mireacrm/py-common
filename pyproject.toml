@@ -1,0 +1,42 @@
+[project]
+name = "mireacrm-common"
+version = "0.1.0"
+description = "Общий обвяз Python-сервисов: транспорт, трассировка, метрики, каркас процесса"
+requires-python = ">=3.11"
+
+# Ядро — то, что нужно любому потребителю: настройки, метрики, трасса, ошибки.
+# Остальное объявлено дополнениями: шлюз берёт только ядро, и в его образ
+# не попадают ни драйвер базы, ни gRPC, ни клиент брокера.
+dependencies = [
+    "fastapi>=0.115",
+    "pydantic-settings>=2.6",
+    "prometheus-client>=0.21",
+]
+
+[project.optional-dependencies]
+db = ["sqlalchemy[asyncio]>=2.0.36", "asyncpg>=0.30"]
+events = ["aio-pika>=9.5", "protobuf>=5.28", "mirea-contracts @ git+https://github.com/mireacrm/contracts-py@v0.1.0"]
+grpc = ["grpcio>=1.68", "grpcio-reflection>=1.68", "protobuf>=5.28", "mirea-contracts @ git+https://github.com/mireacrm/contracts-py@v0.1.0"]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.24"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["mireacrm_common"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF"]
+ignore = [
+    "N802", "N803",              # gRPC-методы обязаны быть в CamelCase
+    "RUF001", "RUF002", "RUF003", # кириллица в строках и комментариях — не опечатка
+    "B008",                       # Depends() в аргументах — идиома FastAPI
+]
